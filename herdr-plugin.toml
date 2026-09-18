@@ -1,0 +1,12 @@
+id = "herdr-simple-name-tabs"
+name = "Herdr Simple Name Tabs"
+version = "0.1.0"
+min_herdr_version = "0.9.1"
+description = "Name tabs after their foreground process"
+platforms = ["linux", "macos"]
+
+[[actions]]
+id = "tick"
+title = "Update the focused tab name"
+contexts = ["global"]
+command = ["bash", "rename-tab.sh"]
