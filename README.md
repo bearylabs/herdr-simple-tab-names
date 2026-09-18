@@ -2,8 +2,8 @@
 
 A deliberately small Herdr plugin that names the focused tab after its
 foreground process and prefixes it with the tab's current position. Labels look
-like `[1] fish`, `[2] vim`, or `[3] lazygit`, with no gaps after tabs are closed
-or reordered.
+like `1:fish`, `2:vim`, or `3:lazygit`, with no gaps after tabs are closed or
+reordered.
 
 ## Files
 
@@ -55,7 +55,7 @@ process, normalizes common Vim and Emacs binary names, and avoids unnecessary
 renames.
 
 A manual rename is preserved while its numeric prefix continues to follow the
-tab's position. For example, renaming a tab to `server` produces `[2] server`.
-To return that tab to automatic process naming, rename it to an empty string.
-A plain numeric name such as `2` also resets it. The next tick replaces the
-label with the current process name.
+tab's position. For example, renaming a tab to `server` produces `2:server`.
+To return that tab to automatic process naming, rename it to an empty string,
+whitespace, or `-`. A plain numeric name such as `2` also resets it. The next
+tick replaces the label with the current process name.

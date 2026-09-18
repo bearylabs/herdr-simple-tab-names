@@ -10,6 +10,16 @@ state_dir="${HERDR_PLUGIN_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/herdr
 [[ -n "$workspace_id" ]] || exit 0
 mkdir -p "$state_dir"
 
+strip_tab_prefix() {
+  sed -E 's/^(\[[0-9]+\][[:space:]]*|[0-9]+:[[:space:]]*)//' <<<"$1"
+}
+
+is_auto_name_request() {
+  local value
+  value="$(strip_tab_prefix "$1")"
+  [[ "$value" == "-" || "$value" =~ ^[0-9]+$ || "$value" =~ ^[[:space:]]*$ ]]
+}
+
 tabs="$("$herdr" tab list --workspace "$workspace_id")"
 panes="$("$herdr" pane list --workspace "$workspace_id")"
 
@@ -50,18 +60,18 @@ while IFS=$'\t' read -r number tab_id current_name; do
 
     # A label different from the one we last wrote was changed by the user.
     if [[ "$current_name" != "$last_name" ]]; then
-      if [[ "$current_name" =~ ^[0-9]+$ ]]; then
+      if is_auto_name_request "$current_name"; then
         custom_name=""
       else
-        custom_name="$(sed -E 's/^\[[0-9]+\][[:space:]]*//' <<<"$current_name")"
+        custom_name="$(strip_tab_prefix "$current_name")"
       fi
     fi
-  elif [[ ! "$current_name" =~ ^[0-9]+$ && ! "$current_name" =~ ^\[[0-9]+\][[:space:]] ]]; then
+  elif ! is_auto_name_request "$current_name" && [[ ! "$current_name" =~ ^(\[[0-9]+\][[:space:]]*|[0-9]+:) ]]; then
     custom_name="$current_name"
   fi
 
   [[ -n "$custom_name" ]] && name="$custom_name"
-  label="[$number] $name"
+  label="${number}:${name}"
 
   if [[ "$current_name" != "$label" ]]; then
     "$herdr" tab rename "$tab_id" "$label" >/dev/null
