@@ -1,4 +1,4 @@
-# Herdr Simple Name Tabs
+# Herdr Simple Tab Names
 
 A deliberately small Herdr plugin that names the focused tab after its
 foreground process and prefixes it with the tab's current position. Labels look
@@ -8,7 +8,7 @@ or reordered.
 ## Files
 
 ```text
-herdr-simple-name-tabs/
+herdr-simple-tab-names/
 ├── herdr-plugin.toml
 └── rename-tab.sh
 ```
@@ -22,7 +22,7 @@ herdr-simple-name-tabs/
 ## Install
 
 ```bash
-herdr plugin install bearylabs/herdr-simple-name-tabs
+herdr plugin install bearylabs/herdr-simple-tab-names
 ```
 
 Herdr Plugin v1 does not expose an event for foreground-process changes, so use
@@ -31,7 +31,7 @@ section of `~/.config/herdr/config.toml`:
 
 ```toml
 tab_bar_right = [
-  { type = "command", command = "\"$HERDR_BIN_PATH\" plugin action invoke herdr-simple-name-tabs.tick >/dev/null 2>&1", interval_seconds = 1, timeout_seconds = 2 },
+  { type = "command", command = "\"$HERDR_BIN_PATH\" plugin action invoke herdr-simple-tab-names.tick >/dev/null 2>&1", interval_seconds = 1, timeout_seconds = 2 },
 ]
 ```
 
@@ -46,7 +46,7 @@ herdr server reload-config
 To uninstall the plugin:
 
 ```bash
-herdr plugin uninstall herdr-simple-name-tabs
+herdr plugin uninstall herdr-simple-tab-names
 ```
 
 There is no build step, settings file, or background daemon. The action

@@ -5,7 +5,7 @@ herdr="${HERDR_BIN_PATH:-herdr}"
 workspace_id="${HERDR_WORKSPACE_ID:-}"
 focused_pane_id="${HERDR_PANE_ID:-}"
 focused_tab_id="${HERDR_TAB_ID:-}"
-state_dir="${HERDR_PLUGIN_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/herdr-simple-name-tabs}"
+state_dir="${HERDR_PLUGIN_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/herdr-simple-tab-names}"
 
 [[ -n "$workspace_id" ]] || exit 0
 mkdir -p "$state_dir"

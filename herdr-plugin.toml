@@ -1,5 +1,5 @@
-id = "herdr-simple-name-tabs"
-name = "Herdr Simple Name Tabs"
+id = "herdr-simple-tab-names"
+name = "Herdr Simple Tab Names"
 version = "0.1.0"
 min_herdr_version = "0.9.1"
 description = "Name tabs after their foreground process"
