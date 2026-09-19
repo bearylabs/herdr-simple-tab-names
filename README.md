@@ -1,9 +1,9 @@
 # Herdr Simple Tab Names
 
-A deliberately small Herdr plugin that names the focused tab after its
-foreground process and prefixes it with the tab's current position. Labels look
-like `1:fish`, `2:vim`, or `3:lazygit`, with no gaps after tabs are closed or
-reordered.
+A deliberately small Herdr plugin that names tabs after the foreground
+process-group leader, matching tmux's automatic-renaming behavior, and prefixes
+them with the tab's current position. Labels look like `1:fish`, `2:vim`, or
+`3:lazygit`, with no gaps after tabs are closed or reordered.
 
 ## Files
 
@@ -51,8 +51,10 @@ herdr plugin uninstall herdr-simple-tab-names
 
 There is no build step, settings file, or background daemon. The action
 renumbers every tab in the focused workspace, reads each tab's foreground
-process, normalizes common Vim and Emacs binary names, and avoids unnecessary
-renames.
+process group, and avoids unnecessary renames. As in tmux, the process-group
+leader determines the name;
+for example, a command run through `sudo` is normally shown as `sudo`. The shell
+name is used when no foreground process-group leader can be determined.
 
 A manual rename is preserved while its numeric prefix continues to follow the
 tab's position. For example, renaming a tab to `server` produces `2:server`.

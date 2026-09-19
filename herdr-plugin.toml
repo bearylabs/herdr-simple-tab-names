@@ -1,8 +1,8 @@
 id = "herdr-simple-tab-names"
 name = "Herdr Simple Tab Names"
-version = "0.1.0"
+version = "0.2.0"
 min_herdr_version = "0.9.1"
-description = "Name tabs after their foreground process"
+description = "Name tabs after the foreground process-group leader"
 platforms = ["linux", "macos"]
 
 [[actions]]

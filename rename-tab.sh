@@ -20,6 +20,16 @@ is_auto_name_request() {
   [[ "$value" == "-" || "$value" =~ ^[0-9]+$ || "$value" =~ ^[[:space:]]*$ ]]
 }
 
+process_name() {
+  local pid="$1"
+  local name
+
+  name="$(ps -p "$pid" -o comm= 2>/dev/null | awk 'NR == 1 { print; exit }')"
+  name="${name##*/}"
+  name="${name#-}"
+  printf '%s' "$name"
+}
+
 tabs="$("$herdr" tab list --workspace "$workspace_id")"
 panes="$("$herdr" pane list --workspace "$workspace_id")"
 
@@ -37,17 +47,28 @@ while IFS=$'\t' read -r number tab_id current_name; do
   if ! process_info="$("$herdr" pane process-info --pane "$pane_id")"; then
     continue
   fi
-  name="$(jq -r '
-    .result.process_info.foreground_processes[-1].name // empty
-  ' <<<"$process_info")"
+  IFS=$'\t' read -r shell_pid name < <(jq -r '
+    .result.process_info
+    | .foreground_process_group_id as $pgrp
+    | [
+        (.shell_pid | tostring),
+        ([.foreground_processes[]? | select(.pid == $pgrp)][0].name // empty)
+      ]
+    | @tsv
+  ' <<<"$process_info")
   name="${name##*/}"
   name="${name#-}"
 
-  # Present common variants under the simple names users expect.
-  case "$name" in
-    nvim|vim.basic|vim.tiny) name="vim" ;;
-    emacs-*|emacsclient)     name="emacs" ;;
-  esac
+  # Like tmux, use the shell when the foreground process-group leader cannot
+  # be determined.
+  if [[ -z "$name" ]]; then
+    name="$(process_name "$shell_pid")"
+  fi
+  if [[ -z "$name" ]]; then
+    name="${SHELL:-}"
+    name="${name##*/}"
+    name="${name#-}"
+  fi
 
   [[ -n "$name" ]] || continue
 
